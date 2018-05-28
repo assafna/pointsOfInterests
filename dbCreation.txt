@@ -1,0 +1,181 @@
+-- DROP TABLE ReviewsForLocation;
+
+ CREATE TABLE Categories(
+     category varchar(20) NOT NULL,
+     PRIMARY KEY(category)
+ )
+
+CREATE TABLE Users (
+    username varchar(8) NOT NULL,
+    password varchar(10) NOT NULL,
+    firstName varchar(20) NOT NULL,
+    lastName varchar(20) NOT NULL,
+    city varchar(20) NOT NULL,
+    country varchar(20) NOT NULL,
+    email varchar(50) NOT NULL,
+    category1 varchar(20) NOT NULL,
+    category2 varchar(20) NOT NULL,
+    category3 varchar(20),
+    category4 varchar(20),
+    verificationQues1 varchar(100) NOT NULL,
+    verificationQues2 varchar(100) NOT NULL,
+    verificationAns1 varchar(100) NOT NULL,
+    verificationAns2 varchar(100) NOT NULL,
+    PRIMARY KEY(username),
+    
+);
+
+CREATE TABLE Locations(
+    id int NOT NULL,
+    name varchar(30) NOT NULL,
+    picture varchar(225) NOT NULL,
+    numberOfViewers int NOT NULL,
+    description varchar(225) NOT NULL,
+    rate int NOT NULL,
+    category varchar(20) NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(category) REFERENCES Categories(category)
+
+);
+
+CREATE TABLE ReviewsForLocation(
+    username varchar(8) NOT NULL,
+    locationId int NOT NULL,
+    reviewDate DATE NOT NULL,
+    review varchar(225) NOT NULL,
+    PRIMARY KEY(username, locationId),
+    FOREIGN KEY(username) REFERENCES Users(username),
+    FOREIGN KEY(locationId) REFERENCES Locations(id)
+)
+
+CREATE TABLE LocationsForUsers(
+    username varchar(8) NOT NULL,
+    locationId int NOT NULL,
+    savedDate DATE NOT NULL,
+    PRIMARY KEY(username, locationId),
+    FOREIGN KEY(username) REFERENCES Users(username),
+    FOREIGN KEY(locationId) REFERENCES Locations(id)
+)
+INSERT INTO Categories (category)
+VALUES ('Shopping');
+
+INSERT INTO Categories (category)
+VALUES ('Attractions');
+
+INSERT INTO Categories (category)
+VALUES ('Museums');
+
+INSERT INTO Categories (category)
+VALUES ('Restaurants');
+
+INSERT INTO Users (username, password, firstName, lastName, city, country, email, Category1, Category2, Category3, Category4, verificationQues1, verificationQues2, verificationAns1, verificationAns2) 
+VALUES ('djdDSZDk', 'smd9goklD3', 'Dudi', 'Levy', 'Beer Sheva', 'Israel', 'dudi@gmail.com', 'Shopping', 'Museums', '', '', 'What is your kindergarten name?', 'What is your first teacher name?', 'Alon', 'Simcha');
+
+INSERT INTO Users (username, password, firstName, lastName, city, country, email, Category1, Category2, Category3, Category4, verificationQues1, verificationQues2, verificationAns1, verificationAns2) 
+VALUES ('oliweVDA', 'sj73gASE3f', 'Alon', 'Barnea', 'Beer Sheva', 'Israel', 'alon@gmail.com', 'Attractions', 'Restaurants', 'Museums', '', 'What is your kindergarten name?', 'What is your first teacher name?', 'Nitzanim', 'Edna');
+
+INSERT INTO Users (username, password, firstName, lastName, city, country, email, Category1, Category2, Category3, Category4, verificationQues1, verificationQues2, verificationAns1, verificationAns2) 
+VALUES ('GDEghdyJ', '45ggYJ7kHn', 'Tomer', 'Cohen', 'Nahariya', 'Israel', 'tomer@gmail.com', 'Attractions', 'Museums', '', '', 'What is your kindergarten name?', 'What is your first teacher name?', 'ChildrenPlace', 'Shoshana');
+
+INSERT INTO Users (username, password, firstName, lastName, city, country, email, Category1, Category2, Category3, Category4, verificationQues1, verificationQues2, verificationAns1, verificationAns2) 
+VALUES ('kdjaCAer', 'DFThj78Lr3', 'Amit', 'Shimshon', 'Herzliya', 'Israel', 'amit@gmail.com', 'Shopping', 'Restaurants', '', '', 'What is your kindergarten name?', 'What is your first teacher name?', 'Alon', 'Simcha');
+
+INSERT INTO Users (username, password, firstName, lastName, city, country, email, Category1, Category2, Category3, Category4, verificationQues1, verificationQues2, verificationAns1, verificationAns2) 
+VALUES ('djngADDr', 'a3r5GHju56', 'Dani', 'Rup', 'Herzliya', 'Israel', 'dudi@gmail.com', 'Shopping', 'Museums', '', '', 'What is your kindergarten name?', 'What is your first teacher name?', 'ChildrenPlace', 'Shoshana');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('1', 'Toronto Islands', 'toronto_island','3', 'toronto island', '5', 'Attractions');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('2', 'CN Tower', 'cn_tower','6', 'cn tower', '4', 'Attractions');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('3','Hockey Hall of Fame', 'hockey_hall','5', 'Hockey Hall of Fame', '3', 'Museums');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('4', 'Royal Ontario Museum', 'Royal_ontario','3', 'Royal Ontario Museum', '2', 'Museums');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('5', 'Ripleys Aquarium of Canada', 'aquarium','6', 'Ripleys Aquarium of Canada', '4', 'Museums');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('6', 'Toronto Zoo', 'toronto_zoo','7', 'toronto zoo', '3', 'Attractions');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('7', 'Centreville Amusement Park', 'centreville_amusment_park','2', 'Centreville Amusement Park', '2', 'Attractions');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('8', 'Canadas Wonderland', 'canadas_wonderland','12', 'Canadas Wonderland', '5', 'Attractions');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('9', 'Textile Museum of Canada', 'textile_museum','2', 'Textile Museum of Canada', '1', 'Museums');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('10', 'Art Gallery of Ontario', 'art_gallery','4', 'Art Gallery of Ontario', '3', 'Museums');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('11', 'Royal Bank Plaza', 'royal_bank_plaza','6', 'Royal Bank Plaza', '4', 'Shopping');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('12', 'Toronto Eaton Centre', 'toronto_eaton_center','7', 'Toronto Eaton Centre', '5', 'Shopping');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('13', 'Bloor-Yorkville', 'bloor_yorkville','5', 'Yorkville is a delightful anomaly in the midst of Toronto highrises and shopping malls', '4', 'Shopping');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('14', 'Chinatown', 'chinatown','10', 'Toronto has the second largest Chinatown in North America', '5', 'Shopping');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('15', 'Queen Street', 'queen_street','9', 'Queen Street cuts east/west through Toronto and morphs from funky retro to chic shops and restaurants to antique shopping to the Beach district at the far east end.', '5', 'Shopping');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('16', '360', 'aquarium','6', 'The Restaurant at the CN Tower', '5', 'Restaurants');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('17', 'Carisma Restaurant', 'carisma','4', 'italian food', '4', 'Restaurants');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('18', 'Donatello Restaurant', 'donatello','6', 'italian food', '5', 'Restaurants');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('19', 'Alo', 'alo','6=7', 'French food', '3', 'Restaurants');
+
+INSERT INTO Locations (id, name, picture, numberOfViewers, description, rate, category)
+VALUES ('20', 'Canoe', 'canoe','3', 'vegeterian food', '3', 'Restaurants');
+
+
+
+INSERT INTO ReviewsForLocation (username, locationId, reviewDate, review)
+VALUES ('djdDSZDk', '1', GetDate(), 'nice place');
+
+INSERT INTO ReviewsForLocation (username, locationId, reviewDate, review)
+VALUES ('djdDSZDk', '3', GetDate(), 'great place');
+
+INSERT INTO ReviewsForLocation (username, locationId, reviewDate, review)
+VALUES ('oliweVDA', '5', GetDate(), 'great for children');
+
+INSERT INTO LocationsForUsers (username, locationId, savedDate)
+VALUES('djdDSZDk', '1', GetDate())
+
+INSERT INTO LocationsForUsers (username, locationId, savedDate)
+VALUES('djdDSZDk', '4', GetDate())
+
+INSERT INTO LocationsForUsers (username, locationId, savedDate)
+VALUES('oliweVDA', '1', GetDate())
+
+INSERT INTO LocationsForUsers (username, locationId, savedDate)
+VALUES('oliweVDA', '3', GetDate())
+
+INSERT INTO LocationsForUsers (username, locationId, savedDate)
+VALUES('GDEghdyJ', '2', GetDate())
+
+INSERT INTO LocationsForUsers (username, locationId, savedDate)
+VALUES('GDEghdyJ', '3', GetDate())
+
+
+
+
+
+
+
+
