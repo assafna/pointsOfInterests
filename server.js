@@ -39,19 +39,8 @@ app.use('/reg', function(req, res, next){
     }
 });
 
-
 app.use('/users', users);
 app.use('/reg/locations', locations);
-
-
-
-
-
-
-
-
-
-
 
 //-------------------------------------------------------------------------------------------------------------------
 //get all categories
@@ -109,6 +98,7 @@ function contains(a, obj) {
     return false;
 }
 
+// get all countries in JSON format, to use for registration
 app.get("/allCountries", function(req, res){
     var parser = new xml2js.Parser();
     fs.readFile('countries.xml', function(err, data) {
