@@ -1,5 +1,3 @@
-//this is only an example, handling everything is yours responsibilty !
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
