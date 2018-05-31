@@ -114,60 +114,7 @@ router.post('/retrivePassword', function(req, res){
     })
 })
 
-//get 3 random location with rate above 4
-//the method inside users mosule because all users can see random location
-router.get('/RandomPopularLocations', function(req, res){
-    var ans = [];
-    var locations;
-    DButilsAzure.execQuery("SELECT * FROM Locations WHERE rate >= 4")
-    .then(function(result){
-        var indexes = [0, 1, 2];
-        if(result.length > 3)
-            indexes = chooseRandomIndexes(result.length);
-        locations = [result[indexes[0]], result[indexes[1]], result[indexes[2]]];
 
-    })
-    .then(function(result){
-        //find revies for first location
-        var rev = getLastReviewsForLocation(locations[0].id);
-        return rev;
-    })
-    .then(function(result){
-        ans.push({
-            location: locations[0],
-            reviews: result
-        })
-        console.log(ans);
-        //find revies for second location
-        var rev = getLastReviewsForLocation(locations[1].id);
-        return rev;
-      
-    })
-    .then(function(result){
-        ans.push({
-            location: locations[1],
-            reviews: result
-        })
-        //console.log(ans);
-
-        //find revies for third location
-        return getLastReviewsForLocation(locations[2].id)       
-    })
-    .then(function(result){
-        ans.push({
-            location: locations[2],
-            reviews: result
-        })
-       // console.log(ans);
-
-        res.send(ans);
-    })
-
-    .catch(function(err){
-        console.log(err);
-    })
-
-})
 
 
 function createRandomUsername() {
@@ -202,35 +149,5 @@ function createRandomPassword(){
 
 }
 
-function chooseRandomIndexes(total){
-    var first = Math.floor((Math.random() * total));
-    var second = Math.floor((Math.random() * total));
-    while(first == second)
-        second = Math.floor((Math.random() * total));
-    var third = Math.floor((Math.random() * total));
-    while(first == third || second == third)
-        third = Math.floor((Math.random() * total));
-    return [first, second, third];
-    
-}
-
-//get 2 last reviews of location
-function getLastReviewsForLocation(locationId){
-    return DButilsAzure.execQuery("SELECT * FROM ReviewsForLocation WHERE locationID='" + locationId + "'")
-    .then(function(result){
-        var sortedDates = result.map(function(item) {
-            return new Date(item.reviewDate).getTime()
-         }).sort(); 
-         // take latest
-         var first = new Date(sortedDates[sortedDates.length-1]);
-         var second = new Date(sortedDates[sortedDates.length-2]);
-         var reviews = [];
-         for(var i = 0; i < result.length; i++){
-             if(result[i].reviewDate - first == 0 || result[i].reviewDate - second == 0)
-                reviews.push(result[i]);
-         }
-         return reviews;
-    })
-}
 
 module.exports = router;
