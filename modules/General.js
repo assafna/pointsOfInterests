@@ -36,7 +36,7 @@ router.get("/allLocations", function(req,res){
 
 //get 3 random location with rate above 4
 //the method inside users mosule because all users can see random location
-router.get('/RandomPopularLocations', function(req, res){
+router.get('/randomPopularLocations', function(req, res){
     var ans = [];
     var locations;
     DButilsAzure.execQuery("SELECT * FROM Locations WHERE rate >= 4")
@@ -90,7 +90,7 @@ router.get('/RandomPopularLocations', function(req, res){
 })
 
 //get information for specific location
-router.get('/LocationInfo', function(req, res){
+router.get('/locationInfo', function(req, res){
     var locationId = req.headers["locationid"];
     var location;
 
