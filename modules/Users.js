@@ -5,14 +5,14 @@ var cors = require('cors');
 var jwt = require('jsonwebtoken');
 var DButilsAzure = require('./DButils');
 
-var secret = 'amit';
+var secret = 'superSecret';
 
 //user login
 router.post('/login', function(req, res){
     var userName = req.body.username;
     var password  = req.body.password;
     //checkif user exists
-    DButilsAzure.execQuery("SELECT * FROM Users WHERE username = '" + userName + "' AND password = '" + password + "'")
+    DButilsAzure.execQuery("SELECT * FROM Users WHERE username = '" + userName + "'COLLATE SQL_Latin1_General_CP1_CS_AS AND password = '" + password + "' COLLATE SQL_Latin1_General_CP1_CS_AS")
     .then(function(result){
         if(result.length == 0){
             return res.json({success: false});
@@ -71,7 +71,11 @@ router.post('/register', function(req,res){
     
     DButilsAzure.execQuery(query)
     .then(function(result){
-        res.send(result)
+        var ans = {
+            username: username,
+            password: password
+        }
+        res.send(ans)
     })
     .catch(function(err){
         console.log(err);
@@ -85,7 +89,7 @@ router.post('/retrivePassword', function(req, res){
     var username = req.body.username;
     var verificationQues = req.body.verificationQues;
     var verificationAns = req.body.verificationAns;
-    DButilsAzure.execQuery("SELECT password, verificationQues1, verificationQues2, verificationAns1, verificationAns2 FROM Users WHERE username='" + username + "'")
+    DButilsAzure.execQuery("SELECT password, verificationQues1, verificationQues2, verificationAns1, verificationAns2 FROM Users WHERE username='" + username + "' COLLATE SQL_Latin1_General_CP1_CS_AS")
     .then(function(result){
         //check if the ques and ans is correct
         if(verificationQues.localeCompare(result[0].verificationQues1) == 0 && verificationAns.localeCompare(result[0].verificationAns1) == 0 ||
@@ -111,6 +115,7 @@ router.post('/retrivePassword', function(req, res){
 })
 
 //get 3 random location with rate above 4
+//the method inside users mosule because all users can see random location
 router.get('/RandomPopularLocations', function(req, res){
     var ans = [];
     var locations;
@@ -120,11 +125,11 @@ router.get('/RandomPopularLocations', function(req, res){
         if(result.length > 3)
             indexes = chooseRandomIndexes(result.length);
         locations = [result[indexes[0]], result[indexes[1]], result[indexes[2]]];
-        //console.log(locations);
+
     })
     .then(function(result){
         //find revies for first location
-        var rev = getLastReviewsForLocation(locations[0]);
+        var rev = getLastReviewsForLocation(locations[0].id);
         return rev;
     })
     .then(function(result){
@@ -134,7 +139,7 @@ router.get('/RandomPopularLocations', function(req, res){
         })
         console.log(ans);
         //find revies for second location
-        var rev = getLastReviewsForLocation(locations[1]);
+        var rev = getLastReviewsForLocation(locations[1].id);
         return rev;
       
     })
@@ -146,7 +151,7 @@ router.get('/RandomPopularLocations', function(req, res){
         //console.log(ans);
 
         //find revies for third location
-        return getLastReviewsForLocation(locations[2])       
+        return getLastReviewsForLocation(locations[2].id)       
     })
     .then(function(result){
         ans.push({
@@ -207,6 +212,25 @@ function chooseRandomIndexes(total){
         third = Math.floor((Math.random() * total));
     return [first, second, third];
     
+}
+
+//get 2 last reviews of location
+function getLastReviewsForLocation(locationId){
+    return DButilsAzure.execQuery("SELECT * FROM ReviewsForLocation WHERE locationID='" + locationId + "'")
+    .then(function(result){
+        var sortedDates = result.map(function(item) {
+            return new Date(item.reviewDate).getTime()
+         }).sort(); 
+         // take latest
+         var first = new Date(sortedDates[sortedDates.length-1]);
+         var second = new Date(sortedDates[sortedDates.length-2]);
+         var reviews = [];
+         for(var i = 0; i < result.length; i++){
+             if(result[i].reviewDate - first == 0 || result[i].reviewDate - second == 0)
+                reviews.push(result[i]);
+         }
+         return reviews;
+    })
 }
 
 module.exports = router;

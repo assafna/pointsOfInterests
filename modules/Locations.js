@@ -18,15 +18,17 @@ router.get("/favoriteLocations", function(req, res){
     //.then(getFavoritLocations)
     .then(function(result){
         locationsObjects = result;
+        console.log(result);
         return DButilsAzure.execQuery("SELECT * FROM ReviewsForLocation WHERE locationId in (" + locationsID + ")")   
     })
     .then(function(result){
+        console.log(result);
         var answer = [];
         for(var i = 0; i < locationsObjects.length; i++){
             var reviews= [];
             for(var j = 0; j < result.length; j++){
                 if(locationsObjects[i].id == result[j].locationId)
-                    reviews.push(reviews[j]);
+                    reviews.push(result[j]);
             }
             answer.push({
                 location: locationsObjects[i],
@@ -97,6 +99,12 @@ router.get("/LastSavedLocations", function(req, res){
     })
 })
 
+router.post("/updateFavoriteList", function(req,res){
+    var favoriteLocations = req.body.favoriteLocations;
+    DButilsAzure.execQuery("SELECT * FROM LocationsForUser")
+    .then()
+})
+
 //add location to favorites list
 router.post("/saveLocation", function(req, res){
     var username = req.decode.payload.username;
@@ -146,6 +154,52 @@ router.post("/rateLocation", function(req,res){
     })
 })
 
+//get information for specific location
+router.get('/LocationInfo', function(req, res){
+    var locationId = req.headers["locationid"];
+    var location;
+
+    DButilsAzure.execQuery("SELECT * FROM Locations WHERE id='" + locationId + "'")
+    .then(function(result){
+        location = result;
+        updateNumOfViewers(result[0].numberOfViewers, locationId);
+    })
+    .then(function(result){
+        return getLastReviewsForLocation(locationId);
+    })
+    
+    .then(function(result){
+        res.send(
+            {locationObject: location,
+            reviews: result}
+        )
+    })     
+    .catch(function(err){
+        console.log(err);
+    })
+   
+
+})
+
+//change favorite locations order
+router.post("/changeLocationsOrder", function(req, res){
+    var username = req.decode.payload.username;
+    var newOrder = req.body.locations;
+
+    DButilsAzure.execQuery("DELETE FROM LocationsForUsers WHERE username='" + username + "'")
+    .then(function(result){
+        addLocationsInNewOrder(newOrder);
+    })
+})
+
+//get all locations in system
+router.get("/AllLocations", function(req,res){
+    DButilsAzure.execQuery("SELECT * FROM Locations")
+    .then(function(result){
+        res.send(result);
+    })
+})
+
 //update location rate according to new user rate
 function updateLocationRate(locationId, newRate, newRateCounter){
     var query = "UPDATE Locations SET rate=" + newRate + ", rateCounter=" + newRateCounter + " WHERE id=" + locationId;
@@ -158,17 +212,6 @@ function updateLocationRate(locationId, newRate, newRateCounter){
     })
 
 }
-
-//change favorite locations order
-router.post("/changeLocationsOrder", function(req, res){
-    var username = req.decode.payload.username;
-    var newOrder = req.body.locations;
-
-    DButilsAzure.execQuery("DELETE FROM LocationsForUsers WHERE username='" + username + "'")
-    .then(function(result){
-        addLocationsInNewOrder(newOrder);
-    })
-})
 
 function updateNumOfViewers(oldNum, locationId){
     console.log("num:" + oldNum);
@@ -196,25 +239,6 @@ function addLocationsInNewOrder(newOrder){
         console.log(err);
     })
 
-}
-
-//get 2 last reviews of location
-function getLastReviewsForLocation(locationId){
-    return DButilsAzure.execQuery("SELECT * FROM ReviewsForLocation WHERE locationID='" + locationId + "'")
-    .then(function(result){
-        var sortedDates = result.map(function(item) {
-            return new Date(item.reviewDate).getTime()
-         }).sort(); 
-         // take latest
-         var first = new Date(sortedDates[sortedDates.length-1]);
-         var second = new Date(sortedDates[sortedDates.length-2]);
-         var reviews = [];
-         for(var i = 0; i < result.length; i++){
-             if(result[i].reviewDate - first == 0 || result[i].reviewDate - second == 0)
-                reviews.push(result[i]);
-         }
-         return reviews;
-    })
 }
 
 function getLatestDate(data) {
@@ -248,6 +272,25 @@ function getMostPopularLocationInCategory(category){
         console.log(err);
     })
 
+}
+
+//get 2 last reviews of location
+function getLastReviewsForLocation(locationId){
+    return DButilsAzure.execQuery("SELECT * FROM ReviewsForLocation WHERE locationID='" + locationId + "'")
+    .then(function(result){
+        var sortedDates = result.map(function(item) {
+            return new Date(item.reviewDate).getTime()
+         }).sort(); 
+         // take latest
+         var first = new Date(sortedDates[sortedDates.length-1]);
+         var second = new Date(sortedDates[sortedDates.length-2]);
+         var reviews = [];
+         for(var i = 0; i < result.length; i++){
+             if(result[i].reviewDate - first == 0 || result[i].reviewDate - second == 0)
+                reviews.push(result[i]);
+         }
+         return reviews;
+    })
 }
 
 //convert array to string

@@ -17,6 +17,7 @@
     "htmlparser2": "^3.9.2",
     "jsonwebtoken": "^8.2.1",
     "nodemon": "^1.17.5",
+    "package.json": "^2.0.1",
     "tedious": "^2.6.1",
     "tedious-connection-pool": "^1.0.5",
     "xml2js": "^0.4.19"

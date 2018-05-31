@@ -70,7 +70,7 @@ exports.execQuery = function (query) {
 
                 dbReq.on('requestCompleted', function () {
                     console.log('request Completed: ' + dbReq.rowCount + ' row(s) returned');
-                    console.log(ans);
+                    //console.log(ans);
                     connection.release();
                     resolve(ans);
 
