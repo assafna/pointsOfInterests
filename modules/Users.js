@@ -79,7 +79,8 @@ router.post('/register', function(req,res){
     })
     .catch(function(err){
         console.log(err);
-    });
+        res.send(err);
+    })
 
     })
 });
@@ -133,6 +134,7 @@ function createRandomUsername() {
     })
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
 
        

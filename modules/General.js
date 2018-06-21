@@ -11,6 +11,10 @@ router.get("/allCategories", function(req, res){
     .then(function(result){
         res.send(result);
     })
+    .catch(function(err){
+        console.log(err);
+        res.send(err);
+    })
  
 })
 
@@ -31,6 +35,10 @@ router.get("/allLocations", function(req,res){
     DButilsAzure.execQuery("SELECT * FROM Locations")
     .then(function(result){
         res.send(result);
+    })
+    .catch(function(err){
+        console.log(err);
+        res.send(err);
     })
 })
 
@@ -85,13 +93,14 @@ router.get('/randomPopularLocations', function(req, res){
 
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
 
 })
 
 //get information for specific location
-router.get('/locationInfo', function(req, res){
-    var locationId = req.headers["locationid"];
+router.get('/locationInfo/:locationId', function(req, res){
+    var locationId = req.params.locationId;
     var location;
 
     DButilsAzure.execQuery("SELECT * FROM Locations WHERE id='" + locationId + "'")
@@ -111,6 +120,7 @@ router.get('/locationInfo', function(req, res){
     })     
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
 
 })
@@ -122,6 +132,11 @@ function updateNumOfViewers(oldNum, locationId){
     .then(function(result){
         var message = "added 1 to number of viewers";
         console.log(message);
+        res.send(message);
+    })
+    .catch(function(err){
+        console.log(err);
+        res.send(err);
     })
 }
 

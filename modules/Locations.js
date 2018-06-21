@@ -41,6 +41,7 @@ router.get("/favoriteLocations", function(req, res){
 
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
 })
 
@@ -76,7 +77,11 @@ router.get("/mostPopularLocationsForUser", function(req, res){
         res.send([values[0], values[1]]);
         
         })
-    });
+    })
+    .catch(function(err){
+        console.log(err);
+        res.send(err);
+    })
 
 })
 
@@ -96,6 +101,7 @@ router.get("/lastSavedLocations", function(req, res){
     })
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
 })
 
@@ -153,6 +159,7 @@ router.put("/updateFavoriteList", function(req,res){
         })
     })
     .catch(function(err){
+        console.log(err);
         res.send(err);
     })
 })
@@ -170,6 +177,7 @@ router.post("/addReview", function(req,res){
     })
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
     
 
@@ -189,6 +197,10 @@ router.put("/rateLocation", function(req,res){
         updateLocationRate(locationId, newRate, numOfRates + 1);
         res.send({newRate: newRate});
     })
+    .catch(function(err){
+        console.log(err);
+        res.send(err);
+    })
 })
 
 
@@ -201,6 +213,10 @@ router.post("/changeLocationsOrder", function(req, res){
     DButilsAzure.execQuery("DELETE FROM LocationsForUsers WHERE username='" + username + "'")
     .then(function(result){
         addLocationsInNewOrder(newOrder);
+    })
+    .catch(function(err){
+        console.log(err);
+        res.send(err);
     })
 })
 
@@ -215,7 +231,9 @@ function updateLocationRate(locationId, newRate, newRateCounter){
     })
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
+
 
 }
 
@@ -234,6 +252,7 @@ function addLocationsInNewOrder(newOrder){
     })
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
 
 }
@@ -267,6 +286,7 @@ function getMostPopularLocationInCategory(category){
     })
     .catch(function(err){
         console.log(err);
+        res.send(err);
     })
 
 }
