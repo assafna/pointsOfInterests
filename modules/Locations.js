@@ -41,7 +41,10 @@ router.get("/favoriteLocations", function(req, res){
 
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 })
 
@@ -80,7 +83,10 @@ router.get("/mostPopularLocationsForUser", function(req, res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 
 })
@@ -101,7 +107,10 @@ router.get("/lastSavedLocations", function(req, res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 })
 
@@ -160,7 +169,10 @@ router.put("/updateFavoriteList", function(req,res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 })
 
@@ -177,7 +189,10 @@ router.post("/addReview", function(req,res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
     
 
@@ -199,7 +214,10 @@ router.put("/rateLocation", function(req,res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 })
 
@@ -216,7 +234,10 @@ router.post("/changeLocationsOrder", function(req, res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 })
 
@@ -231,7 +252,10 @@ function updateLocationRate(locationId, newRate, newRateCounter){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 
 
@@ -252,7 +276,10 @@ function addLocationsInNewOrder(newOrder){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 
 }

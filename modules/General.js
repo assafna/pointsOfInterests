@@ -13,7 +13,10 @@ router.get("/allCategories", function(req, res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
  
 })
@@ -38,7 +41,10 @@ router.get("/allLocations", function(req,res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 })
 
@@ -93,7 +99,10 @@ router.get('/randomPopularLocations', function(req, res){
 
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 
 })
@@ -120,7 +129,10 @@ router.get('/locationInfo/:locationId', function(req, res){
     })     
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 
 })

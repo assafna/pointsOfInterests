@@ -79,7 +79,10 @@ router.post('/register', function(req,res){
     })
     .catch(function(err){
         console.log(err);
-        res.send(err);
+        res.send({
+            seccuss: false,
+            error: err
+        });
     })
 
     })
